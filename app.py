@@ -29,6 +29,30 @@ VISION_MODEL = os.getenv("LLM_VISION_MODEL", MODEL)
 
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 
+# CORS：允许 personal-site（GitHub Pages）跨域调用这个后端的 /api/* 接口
+# 不引入 flask-cors 依赖，手动加响应头，避免服务器上还要重新装包
+ALLOWED_ORIGINS = {
+    "https://harryjzhang69-web.github.io",
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+}
+
+
+@app.after_request
+def add_cors_headers(resp):
+    origin = request.headers.get("Origin", "")
+    if origin in ALLOWED_ORIGINS or origin.endswith(".github.io"):
+        resp.headers["Access-Control-Allow-Origin"] = origin
+        resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return resp
+
+
+@app.route("/api/<path:_any>", methods=["OPTIONS"])
+def cors_preflight(_any):
+    return "", 204
+
+
 _client = None
 
 
