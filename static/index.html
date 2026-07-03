@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>读书行动派 · 把书变成你能做的事</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+<style>
+  :root{
+    /* 莫兰迪色系 —— 克制、低饱和 */
+    --violet:#6E6B99;        /* 主色：灰紫 */
+    --violet-deep:#565480;
+    --violet-soft:#9C9AC0;
+    --ink:#2B2A33;           /* 主文字 */
+    --ink-2:#55545F;         /* 次级文字 */
+    --sub:#8E8D99;           /* 辅助/说明文字 */
+    --faint:#B4B3BE;         /* 最弱文字 */
+
+    /* 背景层次 —— 用微弱深浅划分区域，而非边框 */
+    --bg:#F6F5F2;            /* 页面底：暖白灰 */
+    --surface:#FFFFFF;       /* 纯白面 */
+    --surface-violet:#F3F2FA;/* 极浅紫 */
+    --surface-warm:#F7F4F0;  /* 极浅暖灰 */
+    --hair:rgba(43,42,51,0.06); /* 极细分隔线 */
+
+    /* 莫兰迪辅助色 */
+    --sage:#8B9A8C;          /* 灰绿 */
+    --sage-bg:#EEF2ED;
+    --clay:#B89A7E;          /* 灰陶 */
+    --clay-bg:#F5EFE7;
+    --dusty-rose:#B48C8C;    /* 灰玫 */
+    --dusty-rose-bg:#F4EBEB;
+    --slate:#8B97AC;         /* 灰蓝 */
+    --slate-bg:#EDEFF4;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    letter-spacing:-0.01em;   /* 字间距收紧 */
+  }
+
+  .page{max-width:520px;margin:0 auto;padding:44px 20px 90px;position:relative;}
+
+  /* ---------- Hero ---------- */
+  .hero{margin-bottom:38px;}
+  .hero .kicker{
+    font-size:11.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--violet-soft);margin-bottom:14px;
+  }
+  .hero h1{
+    font-size:29px;line-height:1.25;margin:0 0 12px;font-weight:700;color:var(--ink);
+    letter-spacing:-0.02em;
+  }
+  .hero p{font-size:14.5px;color:var(--sub);margin:0;line-height:1.7;max-width:400px;}
+
+  .step-track{display:flex;align-items:center;gap:5px;margin-top:22px;}
+  .step-dot{width:22px;height:3px;border-radius:2px;background:var(--hair);transition:.35s;}
+  .step-dot.done{background:var(--violet);}
+
+  /* ---------- Section（用留白+微背景分区，无边框） ---------- */
+  .section{margin-bottom:34px;animation:fadeUp .5s ease both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .section-head{
+    display:flex;align-items:baseline;gap:9px;margin-bottom:15px;
+  }
+  .section-head .idx{
+    font-size:12px;font-weight:600;color:var(--violet-soft);font-variant-numeric:tabular-nums;
+  }
+  .section-head .title{font-size:15px;font-weight:650;color:var(--ink);letter-spacing:-0.01em;}
+  .section-head .hint{font-size:12px;color:var(--faint);margin-left:auto;font-weight:400;}
+
+  /* ---------- Tabs（轻量分段） ---------- */
+  .tabs{display:inline-flex;gap:2px;margin-bottom:16px;background:var(--surface-warm);padding:3px;border-radius:11px;}
+  .tab-btn{
+    padding:8px 16px;border-radius:8px;border:none;background:transparent;
+    color:var(--sub);font-size:13px;font-weight:550;cursor:pointer;transition:.22s;font-family:inherit;
+  }
+  .tab-btn.active{background:var(--surface);color:var(--violet);box-shadow:0 1px 4px rgba(43,42,51,0.06);}
+
+  /* ---------- 隐形输入框：融入浅背景，无边框 ---------- */
+  input[type=text], textarea{
+    width:100%;padding:14px 16px;border:none;border-radius:13px;
+    font-size:15px;background:var(--surface-warm);color:var(--ink);font-family:inherit;
+    outline:none;transition:.22s;line-height:1.6;letter-spacing:-0.01em;
+  }
+  input[type=text]::placeholder, textarea::placeholder{color:var(--faint);}
+  input[type=text]:focus, textarea:focus{
+    background:var(--surface);box-shadow:0 0 0 2px var(--violet-soft), 0 4px 16px rgba(110,107,153,0.1);
+  }
+  textarea{resize:vertical;min-height:70px;}
+  .field-label{font-size:12.5px;color:var(--sub);font-weight:550;display:block;margin:16px 0 8px;}
+  .field-label:first-child{margin-top:0;}
+
+  /* ---------- 标签 chips（精致、轻量） ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    padding:8px 15px;border-radius:11px;border:1px solid transparent;
+    background:var(--surface-warm);font-size:13px;color:var(--ink-2);cursor:pointer;
+    transition:all .25s cubic-bezier(.4,0,.2,1);user-select:none;font-weight:500;
+  }
+  .chip:hover{background:#EFEDE9;}
+  .chip.active{
+    background:var(--surface-violet);color:var(--violet-deep);border-color:var(--violet-soft);
+    font-weight:600;box-shadow:0 2px 8px rgba(110,107,153,0.12);
+  }
+
+  /* ---------- 上传区 ---------- */
+  .upload-box{
+    display:block;border:1.5px dashed rgba(110,107,153,0.28);border-radius:15px;padding:30px 20px;
+    text-align:center;cursor:pointer;background:var(--surface-violet);transition:.25s;
+  }
+  .upload-box:hover{background:#EEEDF8;border-color:var(--violet-soft);}
+  .upload-box.has-img{padding:0;border-style:solid;border-color:transparent;overflow:hidden;background:transparent;}
+  .upload-box img{width:100%;max-height:240px;object-fit:contain;display:block;border-radius:15px;}
+  .upload-box .hint{color:var(--sub);font-size:13.5px;line-height:1.7;}
+  .upload-box .hint .icon{font-size:26px;display:block;margin-bottom:8px;opacity:.7;}
+  .upload-box .hint b{color:var(--violet);font-weight:600;}
+  .upload-box input[type=file]{display:none;}
+
+  .identify-spinner{
+    display:inline-block;width:12px;height:12px;border:2px solid rgba(110,107,153,.25);
+    border-top-color:var(--violet);border-radius:50%;animation:spin .7s linear infinite;
+    vertical-align:middle;margin-right:6px;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- 更多个性化折叠 ---------- */
+  .more-toggle{
+    display:inline-flex;align-items:center;gap:7px;margin-top:18px;
+    color:var(--violet);font-size:12.5px;font-weight:550;cursor:pointer;user-select:none;transition:.2s;
+  }
+  .more-toggle:hover{color:var(--violet-deep);}
+  .more-toggle #moreToggleIcon{
+    font-size:12px;width:18px;height:18px;line-height:16px;text-align:center;
+    border:1px solid var(--violet-soft);border-radius:6px;
+  }
+  .more-profile{margin-top:18px;padding-top:20px;border-top:1px solid var(--hair);animation:fadeUp .32s ease both;}
+
+  /* ---------- 主按钮 ---------- */
+  .submit-btn{
+    width:100%;padding:16px 0;border:none;border-radius:14px;
+    background:var(--violet);color:#fff;font-size:15px;font-weight:600;cursor:pointer;
+    box-shadow:0 6px 20px rgba(110,107,153,0.28);transition:.22s;font-family:inherit;letter-spacing:0.01em;
+  }
+  .submit-btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
+  .submit-btn:hover:not(:disabled){background:var(--violet-deep);box-shadow:0 8px 26px rgba(110,107,153,0.36);}
+  .submit-btn:active:not(:disabled){transform:scale(0.985);}
+
+  .error-box{
+    background:var(--dusty-rose-bg);color:#9C5F5F;border-radius:12px;
+    padding:12px 15px;font-size:13px;margin-top:12px;display:none;line-height:1.6;
+  }
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+
+  /* ---------- Loading ---------- */
+  .loading{display:none;text-align:center;padding:52px 0;}
+  .loading .book-spin{font-size:30px;display:inline-block;animation:spinY 1.7s ease-in-out infinite;}
+  @keyframes spinY{0%,100%{transform:rotateY(0);}50%{transform:rotateY(180deg);}}
+  .loading .status-text{margin-top:16px;font-weight:550;color:var(--violet);font-size:13.5px;transition:opacity .3s;}
+
+  /* ---------- 结果 ---------- */
+  .result{display:none;}
+
+  /* 结果主卡 —— “数字资产”：磨砂玻璃 + 渐变微边框 */
+  .asset-card{
+    position:relative;border-radius:22px;padding:26px 24px;margin-bottom:20px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,247,251,0.82));
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 12px 40px rgba(86,84,128,0.1), 0 2px 8px rgba(43,42,51,0.03);
+    animation:fadeUp .5s ease both;
+  }
+  /* 若隐若现的渐变微边框 */
+  .asset-card::before{
+    content:"";position:absolute;inset:0;border-radius:22px;padding:1px;
+    background:linear-gradient(150deg, rgba(156,154,192,0.55), rgba(184,154,126,0.25), rgba(139,154,140,0.35));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+  }
+
+  /* 普通结果块 —— 无边框，靠背景分区 */
+  .block{border-radius:18px;padding:22px 22px;margin-bottom:16px;background:var(--surface);
+    box-shadow:0 3px 14px rgba(43,42,51,0.035);animation:fadeUp .5s ease both;}
+  .block.tint-violet{background:var(--surface-violet);box-shadow:none;}
+
+  .block-head{display:flex;align-items:center;gap:9px;margin-bottom:16px;}
+  .block-head .ico{
+    width:26px;height:26px;border-radius:8px;background:var(--surface-violet);
+    display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+  }
+  .block-head .t{font-size:14.5px;font-weight:650;color:var(--ink);}
+
+  .badge-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
+  .badge{font-size:11px;padding:5px 11px;border-radius:8px;font-weight:600;letter-spacing:0.01em;}
+  .badge.cache{background:var(--sage-bg);color:#5E7160;}
+  .badge.fresh{background:var(--clay-bg);color:#8C6D4E;}
+  .badge.conf-high{background:var(--sage-bg);color:#5E7160;}
+  .badge.conf-medium{background:var(--clay-bg);color:#8C6D4E;}
+  .badge.conf-low{background:var(--dusty-rose-bg);color:#9C5F5F;}
+  .badge.demo{background:var(--surface-violet);color:var(--violet);}
+
+  .book-title{font-size:23px;font-weight:750;margin:2px 0 5px;letter-spacing:-0.02em;line-height:1.3;}
+  .book-author{font-size:13px;color:var(--sub);margin-bottom:16px;}
+  .author-bg{
+    font-size:13px;color:var(--ink-2);line-height:1.75;margin-bottom:16px;padding:13px 15px;
+    background:var(--surface-warm);border-radius:12px;
+  }
+  .low-conf-note{
+    background:var(--dusty-rose-bg);color:#8F5C5C;border-radius:12px;padding:12px 15px;font-size:12.5px;
+    line-height:1.65;margin:2px 0 14px;
+  }
+  .thesis-box{
+    font-size:15.5px;line-height:1.7;color:var(--violet-deep);font-weight:600;letter-spacing:-0.01em;
+    padding-left:14px;border-left:2.5px solid var(--violet-soft);
+  }
+
+  .example-box{
+    background:var(--clay-bg);border-radius:12px;padding:13px 15px;font-size:13px;line-height:1.75;
+    color:#7E6244;
+  }
+
+  /* 列表 */
+  ul.list{margin:0;padding:0;list-style:none;}
+  ul.list li{
+    font-size:14px;line-height:1.75;padding:11px 0 11px 24px;position:relative;color:var(--ink-2);
+    border-bottom:1px solid var(--hair);
+  }
+  ul.list li:last-child{border-bottom:none;}
+  ul.list.dot li:before{content:"";position:absolute;left:5px;top:19px;width:5px;height:5px;border-radius:50%;background:var(--violet-soft);}
+  ul.list.insight li{padding-left:26px;}
+  ul.list.insight li:before{content:"◆";position:absolute;left:2px;top:11px;font-size:10px;color:var(--violet-soft);}
+
+  /* 核心观点卡 */
+  .kp-list{display:flex;flex-direction:column;gap:12px;}
+  .kp-item{padding:15px 17px;background:var(--surface-warm);border-radius:14px;transition:.2s;}
+  .kp-item:hover{background:#F1EFEB;}
+  .kp-item .kp-point{
+    font-size:14px;font-weight:650;color:var(--ink);margin-bottom:7px;
+    display:flex;align-items:center;gap:8px;letter-spacing:-0.01em;
+  }
+  .kp-item .kp-point:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--violet);flex-shrink:0;}
+  .kp-item .kp-explain{font-size:13px;line-height:1.75;color:var(--ink-2);}
+
+  /* 深度解读 */
+  .deep-analysis-box{
+    font-size:14.5px;line-height:1.85;color:var(--ink);letter-spacing:-0.005em;
+  }
+
+  /* 行动 checklist */
+  ul.list.action{list-style:none;}
+  ul.list.action li{display:flex;align-items:flex-start;gap:12px;padding:13px 0;}
+  .chk{
+    width:21px;height:21px;border-radius:7px;border:1.5px solid var(--violet-soft);flex-shrink:0;
+    margin-top:1px;cursor:pointer;position:relative;transition:all .25s cubic-bezier(.4,0,.2,1);
+  }
+  .chk:hover{border-color:var(--violet);background:rgba(110,107,153,0.06);}
+  .chk.checked{background:var(--violet);border-color:var(--violet);transform:scale(1.05);}
+  .chk.checked:after{
+    content:"";position:absolute;left:6.5px;top:3px;width:5px;height:9px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+  }
+  .action-text{flex:1;transition:all .3s ease;}
+  .action-text .action-main{font-size:14px;font-weight:550;color:var(--ink);line-height:1.6;transition:all .3s ease;}
+  .action-text .action-why{display:block;font-size:12.5px;color:var(--sub);margin-top:5px;line-height:1.6;transition:all .3s ease;}
+  .action-text.done .action-main{text-decoration:line-through;color:var(--faint);}
+  .action-text.done .action-why{color:var(--faint);opacity:.6;}
+
+  /* 一句话总结 —— 莫兰迪陶色，不刺眼 */
+  .takeaway-card{
+    border-radius:20px;padding:24px;margin-bottom:16px;
+    background:linear-gradient(145deg, #EFE7DD, #F2ECE4);
+    box-shadow:0 6px 22px rgba(184,154,126,0.15);animation:fadeUp .5s ease both;
+  }
+  .takeaway-card .label{
+    font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--clay);margin-bottom:9px;
+  }
+  .takeaway-card #rTakeaway{font-size:16px;line-height:1.65;font-weight:650;color:#6B5439;letter-spacing:-0.01em;}
+
+  .action-row{display:flex;gap:10px;margin-top:18px;}
+  .again-btn, .share-btn{
+    flex:1;padding:13px 0;border-radius:12px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.22s;font-family:inherit;
+  }
+  .again-btn{border:1px solid var(--hair);background:transparent;color:var(--sub);}
+  .again-btn:hover{background:var(--surface-warm);color:var(--ink-2);}
+  .share-btn{border:none;background:var(--violet);color:#fff;box-shadow:0 4px 14px rgba(110,107,153,0.26);}
+  .share-btn:hover{background:var(--violet-deep);}
+  .copy-text-link{
+    text-align:center;font-size:12px;color:var(--faint);margin-top:12px;cursor:pointer;
+    text-decoration:underline;text-decoration-color:var(--hair);transition:.2s;
+  }
+  .copy-text-link:hover{color:var(--sub);}
+
+  .cache-note{text-align:center;font-size:11.5px;color:var(--faint);margin-top:30px;line-height:1.7;font-variant-numeric:tabular-nums;}
+
+  .toast{
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:12px 22px;border-radius:12px;font-size:13px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.22);opacity:0;transition:.28s;z-index:100;
+    pointer-events:none;white-space:nowrap;font-weight:500;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="kicker">READING · INTO · ACTION</div>
+    <h1>把一本书<br>变成你能马上做的事</h1>
+    <p>没时间读完整本书？说个书名或拍张封面，拿到一份真正读懂后、只写给你的深度解读。</p>
+    <div class="step-track">
+      <div class="step-dot" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+      <div class="step-dot" id="dot3"></div>
+    </div>
+  </div>
+
+  <!-- 1. 选书 -->
+  <div class="section" style="animation-delay:.04s">
+    <div class="section-head">
+      <span class="idx">01</span>
+      <span class="title">这本书是</span>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="text" onclick="switchTab('text')">输入书名</button>
+      <button class="tab-btn" data-tab="img" onclick="switchTab('img')">拍封面识别</button>
+    </div>
+
+    <div id="tab-text">
+      <input type="text" id="bookTitle" placeholder="例如：非暴力沟通 / 原则 / 定位" oninput="markStep(1)">
+      <label class="field-label">作者（选填，同名书很多，写了识别更准）</label>
+      <input type="text" id="bookAuthor" placeholder="例如：马歇尔·卢森堡">
+    </div>
+
+    <div id="tab-img" style="display:none;">
+      <label class="upload-box" id="uploadBox">
+        <input type="file" id="coverFile" accept="image/*" onchange="onFileChange(event)">
+        <div class="hint" id="uploadHint">
+          <span class="icon">◇</span>
+          点击上传一张封面照片<br><b>无需下载电子版，拍一下就行</b>
+        </div>
+        <img id="previewImg" style="display:none;">
+      </label>
+      <div id="identifiedBox" style="display:none;margin-top:12px;">
+        <label class="field-label" id="identifiedLabel">识别结果（不对可以手动改）</label>
+        <input type="text" id="identifiedTitle" placeholder="书名">
+        <div style="height:8px;"></div>
+        <input type="text" id="identifiedAuthor" placeholder="作者">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 身份 -->
+  <div class="section" style="animation-delay:.1s">
+    <div class="section-head">
+      <span class="idx">02</span>
+      <span class="title">你现在的身份</span>
+    </div>
+    <div class="chips" id="roleChips">
+      <div class="chip active" data-role="产品经理">产品经理</div>
+      <div class="chip" data-role="创业者">创业者</div>
+      <div class="chip" data-role="职场新人">职场新人</div>
+      <div class="chip" data-role="团队管理者">团队管理者</div>
+      <div class="chip" data-role="自由职业者">自由职业者</div>
+      <div class="chip" data-role="家长">家长</div>
+      <div class="chip" data-role="学生">学生</div>
+    </div>
+    <label class="field-label">或者自己写一个身份 / 场景标签</label>
+    <input type="text" id="customRole" placeholder="不填就用上面选的">
+
+    <div class="more-toggle" id="moreToggle" onclick="toggleMore()">
+      <span id="moreToggleIcon">+</span> 更多个性化信息（选填，填得越细越贴近你）
+    </div>
+    <div class="more-profile" id="moreProfile" style="display:none;">
+      <label class="field-label">年龄段</label>
+      <div class="chips" id="ageChips">
+        <div class="chip" data-age="18岁以下">18岁以下</div>
+        <div class="chip" data-age="18-24岁">18–24</div>
+        <div class="chip" data-age="25-34岁">25–34</div>
+        <div class="chip" data-age="35-44岁">35–44</div>
+        <div class="chip" data-age="45岁以上">45+</div>
+      </div>
+
+      <label class="field-label">MBTI（不知道可以不填）</label>
+      <input type="text" id="mbtiInput" placeholder="例如：INTJ / ENFP">
+
+      <label class="field-label">建议风格偏好（可多选）</label>
+      <div class="chips" id="styleChips">
+        <div class="chip" data-style="直接给结论，别绕弯子">直接给结论</div>
+        <div class="chip" data-style="需要拆解得很细的具体步骤">步骤要细</div>
+        <div class="chip" data-style="喜欢用故事/案例来说明道理">喜欢案例</div>
+        <div class="chip" data-style="语气温和一些，多鼓励少说教">多鼓励少说教</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 问题 -->
+  <div class="section" style="animation-delay:.16s">
+    <div class="section-head">
+      <span class="idx">03</span>
+      <span class="title">你当下遇到的具体问题</span>
+      <span class="hint">选填 · 越具体越准</span>
+    </div>
+    <textarea id="question" placeholder="例如：最近在跟研发团队沟通需求老是被打回，不知道怎么表达才有效" oninput="markStep(3)"></textarea>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="generate()">生成我的知识卡片</button>
+  <div class="error-box" id="errorBox"></div>
+
+  <div class="loading" id="loadingBox">
+    <div class="book-spin">📖</div>
+    <div class="status-text" id="statusText">正在理解这本书…</div>
+  </div>
+
+  <!-- 结果 -->
+  <div class="result" id="resultBox">
+
+    <div class="asset-card">
+      <div class="badge-row" id="badgeRow"></div>
+      <div class="book-title" id="rTitle"></div>
+      <div class="book-author" id="rAuthor"></div>
+      <div class="low-conf-note" id="lowConfNote" style="display:none;">
+        AI 对这本书的了解比较有限，以下内容是基于书名做的推测性解读，细节可能不准，建议自己再核实一下核心观点部分。
+      </div>
+      <div class="author-bg" id="rAuthorBg" style="display:none;"></div>
+      <div class="thesis-box" id="rThesis"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="ico">📖</span><span class="t">这本书大致在讲什么</span></div>
+      <ul class="list dot" id="rStructure"></ul>
+      <div id="rExampleBox" style="display:none;margin-top:14px;">
+        <label class="field-label" style="margin-top:0;">书中的代表性案例</label>
+        <div class="example-box" id="rExample"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="ico">📌</span><span class="t">核心观点展开</span></div>
+      <div class="kp-list" id="rKeyPoints"></div>
+    </div>
+
+    <div class="block tint-violet">
+      <div class="block-head"><span class="ico">🔗</span><span class="t">深度解读 · 跟你的关系</span></div>
+      <div class="deep-analysis-box" id="rDeepAnalysis"></div>
+      <ul class="list insight" id="rInsight" style="margin-top:14px;"></ul>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="ico">✅</span><span class="t">你可以立刻做的事</span></div>
+      <ul class="list action" id="rAction"></ul>
+    </div>
+
+    <div class="takeaway-card">
+      <div class="label">One Line Takeaway</div>
+      <div id="rTakeaway"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="again-btn" onclick="resetForm()">↺ 再读一本</button>
+      <button class="share-btn" onclick="generateShareImage()">生成分享图</button>
+    </div>
+    <div class="copy-text-link" onclick="shareCard()">或复制文字文案</div>
+  </div>
+
+  <div class="cache-note" id="cacheNote" style="display:none;"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let coverBase64 = null;
+let lastResultData = null;
+
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  document.getElementById('tab-text').style.display = tab==='text' ? 'block':'none';
+  document.getElementById('tab-img').style.display = tab==='img' ? 'block':'none';
+}
+
+document.getElementById('roleChips').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  document.querySelectorAll('#roleChips .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  markStep(2);
+});
+
+document.getElementById('ageChips').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  const wasActive = chip.classList.contains('active');
+  document.querySelectorAll('#ageChips .chip').forEach(c=>c.classList.remove('active'));
+  if(!wasActive) chip.classList.add('active'); // 再点一次可以取消选择
+});
+
+document.getElementById('styleChips').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  chip.classList.toggle('active'); // 风格偏好允许多选
+});
+
+function toggleMore(){
+  const box = document.getElementById('moreProfile');
+  const icon = document.getElementById('moreToggleIcon');
+  const isOpen = box.style.display !== 'none';
+  box.style.display = isOpen ? 'none' : 'block';
+  icon.textContent = isOpen ? '+' : '−';
+}
+
+function getAgeRange(){
+  const c = document.querySelector('#ageChips .chip.active');
+  return c ? c.dataset.age : '';
+}
+function getMbti(){
+  return document.getElementById('mbtiInput').value.trim();
+}
+function getCommStyle(){
+  const chips = document.querySelectorAll('#styleChips .chip.active');
+  return Array.from(chips).map(c=>c.dataset.style).join('；');
+}
+
+function markStep(n){
+  document.getElementById('dot'+n).classList.add('done');
+}
+
+function onFileChange(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    const dataUrl = evt.target.result;
+    coverBase64 = dataUrl.split(',')[1];
+    document.getElementById('previewImg').src = dataUrl;
+    document.getElementById('previewImg').style.display = 'block';
+    document.getElementById('uploadHint').style.display = 'none';
+    document.getElementById('uploadBox').classList.add('has-img');
+    markStep(1);
+    identifyCover();
+  };
+  reader.readAsDataURL(file);
+}
+
+async function identifyCover(){
+  const identifiedBox = document.getElementById('identifiedBox');
+  const idTitle = document.getElementById('identifiedTitle');
+  const idAuthor = document.getElementById('identifiedAuthor');
+  const idLabel = document.getElementById('identifiedLabel');
+  identifiedBox.style.display = 'block';
+  idLabel.innerHTML = '<span class="identify-spinner"></span>正在识别…';
+  idTitle.value = '';
+  idTitle.placeholder = '识别中…';
+  idAuthor.value = '';
+  try{
+    const resp = await fetch('/api/identify', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({cover_image: coverBase64})
+    });
+    const data = await resp.json();
+    idLabel.textContent = '识别结果（不对可以手动改）';
+    if(data.error){
+      idTitle.value = '';
+      idTitle.placeholder = data.error;
+      idAuthor.value = '';
+      return;
+    }
+    idTitle.value = data.title || '';
+    idAuthor.value = data.author || '';
+  }catch(err){
+    idLabel.textContent = '识别结果（不对可以手动改）';
+    idTitle.value = '';
+    idTitle.placeholder = '识别请求出错，可手动输入书名';
+  }
+}
+
+function getRole(){
+  const custom = document.getElementById('customRole').value.trim();
+  if(custom) return custom;
+  const activeChip = document.querySelector('#roleChips .chip.active');
+  return activeChip ? activeChip.dataset.role : '普通读者';
+}
+
+const LOADING_STEPS = [
+  '正在理解这本书…',
+  '正在提炼核心观点…',
+  '正在结合你的场景定制…',
+  '马上就好…',
+];
+let loadingTimer = null;
+
+function startLoadingAnim(){
+  const el = document.getElementById('statusText');
+  let i = 0;
+  el.textContent = LOADING_STEPS[0];
+  loadingTimer = setInterval(()=>{
+    i = (i+1) % LOADING_STEPS.length;
+    el.style.opacity = 0;
+    setTimeout(()=>{ el.textContent = LOADING_STEPS[i]; el.style.opacity = 1; }, 200);
+  }, 1300);
+}
+function stopLoadingAnim(){
+  if(loadingTimer){ clearInterval(loadingTimer); loadingTimer = null; }
+}
+
+async function generate(){
+  const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
+  const errorBox = document.getElementById('errorBox');
+  errorBox.style.display = 'none';
+
+  let title, author;
+  if(activeTab==='text'){
+    title = document.getElementById('bookTitle').value.trim();
+    author = document.getElementById('bookAuthor').value.trim();
+    if(!title){
+      showError('请输入书名，或切换到"拍封面识别"上传一张照片');
+      return;
+    }
+  }else{
+    title = document.getElementById('identifiedTitle').value.trim();
+    author = document.getElementById('identifiedAuthor').value.trim();
+    if(!coverBase64){
+      showError('请先上传一张封面照片');
+      return;
+    }
+    if(!title){
+      showError('还没识别出书名，请等识别完成，或在上方手动填写书名');
+      return;
+    }
+  }
+
+  const payload = {
+    book_title: title,
+    author: author,
+    role: getRole(),
+    question: document.getElementById('question').value.trim(),
+    age_range: getAgeRange(),
+    mbti: getMbti(),
+    comm_style: getCommStyle(),
+  };
+
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('loadingBox').style.display = 'block';
+  document.getElementById('resultBox').style.display = 'none';
+  startLoadingAnim();
+
+  try{
+    const resp = await fetch('/api/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+    const data = await resp.json();
+    if(!resp.ok){
+      showError(data.error || '生成失败，请重试');
+      return;
+    }
+    renderResult(data);
+  }catch(err){
+    showError('请求出错：' + err.message);
+  }finally{
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('loadingBox').style.display = 'none';
+    stopLoadingAnim();
+  }
+}
+
+function showError(msg){
+  const errorBox = document.getElementById('errorBox');
+  errorBox.textContent = msg;
+  errorBox.style.display = 'block';
+  errorBox.style.animation = 'none';
+  requestAnimationFrame(()=>{ errorBox.style.animation = 'shake .4s'; });
+}
+
+function confLabel(c){
+  return {high:'AI 较熟悉这本书', medium:'AI 了解一般 · 框架性解读', low:'AI 了解有限 · 推测性解读'}[c] || '未知';
+}
+
+function renderResult(data){
+  lastResultData = data;
+  const badgeRow = document.getElementById('badgeRow');
+  badgeRow.innerHTML = '';
+  if(data.demo_mode){
+    badgeRow.innerHTML += `<span class="badge demo">演示模式</span>`;
+  }
+  badgeRow.innerHTML += data.cache_hit
+    ? `<span class="badge cache">⚡ 缓存命中</span>`
+    : `<span class="badge fresh">首次解读</span>`;
+  badgeRow.innerHTML += `<span class="badge conf-${data.known_confidence}">${confLabel(data.known_confidence)}</span>`;
+
+  document.getElementById('rTitle').textContent = '《' + data.title + '》';
+  document.getElementById('rAuthor').textContent = '作者：' + (data.author || '未知');
+  document.getElementById('rThesis').textContent = data.core_thesis || '';
+
+  const authorBg = document.getElementById('rAuthorBg');
+  if(data.author_background){
+    authorBg.textContent = data.author_background;
+    authorBg.style.display = 'block';
+  }else{
+    authorBg.style.display = 'none';
+  }
+
+  const lowConfNote = document.getElementById('lowConfNote');
+  lowConfNote.style.display = data.known_confidence === 'low' ? 'block' : 'none';
+
+  document.getElementById('rStructure').innerHTML =
+    (data.book_structure||[]).map(p=>`<li>${escapeHtml(p)}</li>`).join('') ||
+    '<li style="color:var(--faint);">（暂无结构梳理）</li>';
+
+  const exampleBox = document.getElementById('rExampleBox');
+  if(data.notable_example){
+    document.getElementById('rExample').textContent = data.notable_example;
+    exampleBox.style.display = 'block';
+  }else{
+    exampleBox.style.display = 'none';
+  }
+
+  document.getElementById('rKeyPoints').innerHTML =
+    (data.key_points||[]).map(p=>{
+      if(typeof p === 'string') return `<div class="kp-item"><div class="kp-point">${escapeHtml(p)}</div></div>`;
+      return `<div class="kp-item">
+        <div class="kp-point">${escapeHtml(p.point||'')}</div>
+        <div class="kp-explain">${escapeHtml(p.explain||'')}</div>
+      </div>`;
+    }).join('');
+
+  document.getElementById('rDeepAnalysis').textContent = data.deep_analysis || '';
+  document.getElementById('rInsight').innerHTML =
+    (data.insight_for_you||[]).map(p=>`<li>${escapeHtml(p)}</li>`).join('');
+  document.getElementById('rAction').innerHTML =
+    (data.action_checklist||[]).map((p)=>{
+      if(typeof p === 'string'){
+        return `<li><div class="chk" onclick="toggleChk(this)"></div><span class="action-text"><span class="action-main">${escapeHtml(p)}</span></span></li>`;
+      }
+      return `<li><div class="chk" onclick="toggleChk(this)"></div><span class="action-text">
+        <span class="action-main">${escapeHtml(p.action||'')}</span>
+        ${p.why ? `<span class="action-why">${escapeHtml(p.why)}</span>` : ''}
+      </span></li>`;
+    }).join('');
+  document.getElementById('rTakeaway').textContent = data.one_line_takeaway || '';
+
+  const resultBox = document.getElementById('resultBox');
+  resultBox.style.display = 'block';
+  resultBox.querySelectorAll('.asset-card, .block, .takeaway-card').forEach((c,i)=>{
+    c.style.animation = 'none';
+    void c.offsetWidth;
+    c.style.animation = `fadeUp .5s ease both`;
+    c.style.animationDelay = (i*0.07)+'s';
+  });
+  resultBox.scrollIntoView({behavior:'smooth', block:'start'});
+  loadCacheStats();
+}
+
+function toggleChk(el){
+  el.classList.toggle('checked');
+  el.nextElementSibling.classList.toggle('done');
+}
+
+function escapeHtml(s){
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'), 2200);
+}
+
+function wrapCanvasText(ctx, text, maxWidth){
+  const lines = [];
+  let line = '';
+  for(const ch of String(text||'')){
+    const test = line + ch;
+    if(ctx.measureText(test).width > maxWidth && line){
+      lines.push(line);
+      line = ch;
+    }else{
+      line = test;
+    }
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+// 画一个柔和的全息光斑（径向渐变圆），模拟"浮光幻梦"风的朦胧光影层次
+function drawGlow(ctx, x, y, r, colorInner, alpha){
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0, colorInner.replace('ALPHA', alpha));
+  g.addColorStop(1, colorInner.replace('ALPHA', '0'));
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+}
+
+function starRating(conf){
+  const map = {high:5, medium:4, low:2};
+  const n = map[conf]===undefined ? 3 : map[conf];
+  return '★'.repeat(n) + '☆'.repeat(5-n);
+}
+
+function hashId(str){
+  let h = 0;
+  const s = String(str||'');
+  for(let i=0;i<s.length;i++){ h = (h*31 + s.charCodeAt(i)) >>> 0; }
+  return 1000 + (h % 8999);
+}
+
+function generateShareImage(){
+  if(!lastResultData) return;
+  const d = lastResultData;
+  const FONT = '-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif';
+  const W = 1080;
+  const padX = 80, maxW = W - padX*2;
+
+  // ---- 先用一个不显示的测量画布，把所有文字按最终字号换行，算出真实需要的高度 ----
+  // 之前固定H=1440导致内容多的时候被压缩挤爆，这次改成"内容多就画布更高"
+  const mCanvas = document.createElement('canvas');
+  mCanvas.width = W; mCanvas.height = 10;
+  const mctx = mCanvas.getContext('2d');
+
+  mctx.font = `800 58px ${FONT}`;
+  const hookLines = wrapCanvasText(mctx, d.share_hook || d.one_line_takeaway || d.title, maxW).slice(0,3);
+
+  const quoteRaw = (d.insight_for_you && d.insight_for_you[0]) ||
+    (d.deep_analysis ? d.deep_analysis.slice(0,70) + '…' : '');
+  mctx.font = `500 25px ${FONT}`;
+  const quoteLines = quoteRaw ? wrapCanvasText(mctx, quoteRaw, maxW-100) : [];
+
+  const actionsMeta = (d.action_checklist||[]).slice(0,4).map(a=>{
+    const text = typeof a === 'string' ? a : (a.action||'');
+    const why = typeof a === 'object' ? (a.why||'') : '';
+    mctx.font = `500 27px ${FONT}`;
+    const lines = wrapCanvasText(mctx, text, maxW-70);
+    let whyLines = [];
+    if(why){
+      mctx.font = `400 19px ${FONT}`;
+      whyLines = wrapCanvasText(mctx, '💭 '+why, maxW-70);
+    }
+    return {lines, whyLines};
+  });
+
+  mctx.font = `700 30px ${FONT}`;
+  const takeawayLines = wrapCanvasText(mctx, d.one_line_takeaway||'', maxW-56);
+
+  // ---- 累加各区块高度，得出这张图真正需要的总高度 ----
+  let H = 108 + 58 + 96;                       // 顶部标签 + 人格徽章
+  H += hookLines.length*72 + 30;                // 钩子大标题
+  H += 90 + 56;                                 // 书籍磨砂卡 + 熟读度星级
+  const quoteBoxH = quoteLines.length ? (64 + quoteLines.length*34 + 16) : 0;
+  H += quoteLines.length ? (quoteBoxH + 36) : 0; // 核心洞察引言卡
+  actionsMeta.forEach(a=>{
+    H += Math.max(a.lines.length*35, 20) + (a.whyLines.length ? a.whyLines.length*24+8 : 0) + 34;
+  });
+  H += 12 + 80 + takeawayLines.length*42 + 46;   // 专属预言卡
+  H += 100;                                      // 底部编号+品牌角标留白
+  H = Math.max(Math.round(H), 1440);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  /* ================= 背景：深空蓝紫渐变 + 全息光斑（学网易云年度报告基调） ================= */
+  const bg = ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,'#1B1533');
+  bg.addColorStop(0.45,'#231A42');
+  bg.addColorStop(1,'#170F2B');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,W,H);
+
+  // 多层朦胧光斑：紫、粉、金三色叠加出"全息衍射"氛围
+  drawGlow(ctx, W*0.82, H*0.1, 420, 'rgba(155,140,255,ALPHA)', 0.35);
+  drawGlow(ctx, W*0.08, H*0.28, 360, 'rgba(255,150,200,ALPHA)', 0.20);
+  drawGlow(ctx, W*0.75, H*0.7, 460, 'rgba(255,205,140,ALPHA)', 0.16);
+  drawGlow(ctx, W*0.15, H*0.94, 380, 'rgba(140,180,255,ALPHA)', 0.22);
+
+  // 细密星点，增加"宇宙感"
+  for(let i=0;i<80;i++){
+    const sx = Math.random()*W, sy = Math.random()*H;
+    const r = Math.random()*1.6+0.4;
+    ctx.fillStyle = `rgba(255,255,255,${(Math.random()*0.5+0.15).toFixed(2)})`;
+    ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
+  }
+
+  let y = 108;
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+
+  /* ================= 顶部：仪式感报告标签 ================= */
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.font = `600 22px ${FONT}`;
+  ctx.fillText('2026 · 阅读行动报告', padX, y);
+  y += 58;
+
+  /* ================= 人格化标签徽章（学网易云"专属音乐颜色/人格"）================= */
+  ctx.font = `600 26px ${FONT}`;
+  const tagText = '✦ ' + (d.persona_tag || '读书行动派');
+  const tagW = ctx.measureText(tagText).width + 44;
+  const tagGrad = ctx.createLinearGradient(padX, 0, padX+tagW, 0);
+  tagGrad.addColorStop(0, 'rgba(196,166,255,0.28)');
+  tagGrad.addColorStop(1, 'rgba(255,190,220,0.22)');
+  ctx.fillStyle = tagGrad;
+  roundRect(ctx, padX, y, tagW, 46, 23);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+  ctx.lineWidth = 1.2;
+  roundRect(ctx, padX, y, tagW, 46, 23);
+  ctx.stroke();
+  ctx.fillStyle = '#F3EEFF';
+  ctx.fillText(tagText, padX+22, y+31);
+  y += 96;
+
+  /* ================= 钩子大标题：渐变全息文字 ================= */
+  ctx.font = `800 58px ${FONT}`;
+  const titleGrad = ctx.createLinearGradient(padX, y-50, padX+maxW, y+50);
+  titleGrad.addColorStop(0, '#FFFFFF');
+  titleGrad.addColorStop(0.5, '#E5DCFF');
+  titleGrad.addColorStop(1, '#FFD9EC');
+  ctx.fillStyle = titleGrad;
+  hookLines.forEach(line=>{ ctx.fillText(line, padX, y); y += 72; });
+  y += 30;
+
+  /* ================= 书籍信息：磨砂玻璃卡片 ================= */
+  const bookCardH = 96;
+  ctx.fillStyle = 'rgba(255,255,255,0.07)';
+  roundRect(ctx, padX-24, y-58, maxW+48, bookCardH, 18);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, padX-24, y-58, maxW+48, bookCardH, 18);
+  ctx.stroke();
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `700 34px ${FONT}`;
+  ctx.fillText(`《${d.title}》`, padX, y-14);
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = `500 22px ${FONT}`;
+  ctx.fillText(d.author ? '作者 · '+d.author : '', padX, y+20);
+  y += 90;
+
+  /* ================= AI 熟读度星级：把技术字段变成有情绪感的星星 ================= */
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
+  ctx.font = `500 20px ${FONT}`;
+  ctx.fillText('AI 熟读度', padX, y);
+  ctx.fillStyle = '#FFD996';
+  ctx.font = `600 22px ${FONT}`;
+  ctx.fillText(starRating(d.known_confidence), padX+112, y);
+  y += 56;
+
+  /* ================= 核心洞察引言卡：大引号 + 一句最有分量的洞察 ================= */
+  if(quoteLines.length){
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    roundRect(ctx, padX-24, y-30, maxW+48, quoteBoxH, 18);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,217,150,0.5)';
+    ctx.font = `800 56px Georgia, serif`;
+    ctx.fillText('"', padX-6, y+22);
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.font = `500 25px ${FONT}`;
+    quoteLines.forEach((line,i)=>ctx.fillText(line, padX+38, y+8+i*34));
+    y += quoteBoxH + 30;
+  }
+
+  /* ================= 行动清单：发光序号 + why 小字理由 ================= */
+  actionsMeta.forEach((a,idx)=>{
+    const cx = padX+16, cy = y-8;
+    drawGlow(ctx, cx, cy, 30, 'rgba(255,215,150,ALPHA)', 0.5);
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.beginPath(); ctx.arc(cx, cy, 17, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,215,150,0.85)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(cx, cy, 17, 0, Math.PI*2); ctx.stroke();
+    ctx.fillStyle = '#FFD996';
+    ctx.font = `700 18px ${FONT}`;
+    ctx.textAlign = 'center';
+    ctx.fillText(String(idx+1), cx, cy+6);
+    ctx.textAlign = 'left';
+
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.font = `500 27px ${FONT}`;
+    a.lines.forEach((line,i)=>ctx.fillText(line, padX+50, y+i*35));
+    let localY = y + Math.max(a.lines.length*35, 20);
+    if(a.whyLines.length){
+      ctx.fillStyle = 'rgba(255,255,255,0.42)';
+      ctx.font = `400 19px ${FONT}`;
+      a.whyLines.forEach((line,i)=>ctx.fillText(line, padX+50, localY+4+i*24));
+      localY += a.whyLines.length*24 + 8;
+    }
+    y = localY + 34;
+  });
+
+  y += 12;
+  /* ================= 一句话总结："专属预言"卡片 ================= */
+  ctx.font = `700 30px ${FONT}`;
+  const boxH = 80 + takeawayLines.length*42;
+  const boxGrad = ctx.createLinearGradient(padX-20, y-42, padX-20, y-42+boxH);
+  boxGrad.addColorStop(0, 'rgba(196,166,255,0.16)');
+  boxGrad.addColorStop(1, 'rgba(255,190,220,0.10)');
+  ctx.fillStyle = boxGrad;
+  roundRect(ctx, padX-20, y-42, maxW+40, boxH, 20);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, padX-20, y-42, maxW+40, boxH, 20);
+  ctx.stroke();
+
+  ctx.fillStyle = '#C9B8FF';
+  ctx.font = `600 19px ${FONT}`;
+  ctx.fillText('✦ 你的专属阅读预言', padX, y-10);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `700 30px ${FONT}`;
+  takeawayLines.forEach((line,i)=>ctx.fillText(line, padX, y+30+i*42));
+  y += boxH + 46;
+
+  /* ================= 底部：收藏编号 + 隐蔽品牌角标（限定卡片仪式感） ================= */
+  ctx.fillStyle = 'rgba(255,255,255,0.28)';
+  ctx.font = `500 19px ${FONT}`;
+  ctx.textAlign = 'center';
+  ctx.fillText(`NO.${hashId(d.title+(d.author||''))} · 读书行动派 · 把书变成你能做的事`, W/2, H-42);
+  ctx.textAlign = 'left';
+
+  canvas.toBlob((blob)=>{
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `读书行动派_${d.title}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 3000);
+    showToast('分享图已生成，去发小红书/朋友圈吧 ✨');
+  }, 'image/png');
+}
+
+function shareCard(){
+  if(!lastResultData) return;
+  const d = lastResultData;
+  const kpText = (d.key_points||[]).map(p=>{
+    if(typeof p === 'string') return '· '+p;
+    return `· ${p.point}：${p.explain}`;
+  }).join('\n');
+  const actionText = (d.action_checklist||[]).map(p=>{
+    if(typeof p === 'string') return '□ '+p;
+    return `□ ${p.action}（${p.why}）`;
+  }).join('\n');
+  const text =
+`📖《${d.title}》${d.author ? '｜'+d.author : ''}
+
+${d.core_thesis}
+
+📌 核心观点：
+${kpText}
+
+🔗 深度解读：
+${d.deep_analysis||''}
+
+💡 这跟你有什么关系：
+${(d.insight_for_you||[]).map(p=>'· '+p).join('\n')}
+
+✅ 你可以立刻做的事：
+${actionText}
+
+一句话总结：${d.one_line_takeaway}
+
+—— 用「读书行动派」生成`;
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast('已复制，可以粘贴到小红书/朋友圈了 ✨');
+    }).catch(()=>{
+      showToast('复制失败，请手动选择文字复制');
+    });
+  }else{
+    showToast('当前浏览器不支持自动复制');
+  }
+}
+
+function resetForm(){
+  document.getElementById('resultBox').style.display = 'none';
+  document.getElementById('bookTitle').value = '';
+  document.getElementById('bookAuthor').value = '';
+  document.getElementById('question').value = '';
+  document.getElementById('identifiedTitle').value = '';
+  document.getElementById('identifiedAuthor').value = '';
+  document.getElementById('identifiedBox').style.display = 'none';
+  document.getElementById('dot1').classList.remove('done');
+  document.getElementById('dot3').classList.remove('done');
+  coverBase64 = null;
+  document.getElementById('previewImg').style.display = 'none';
+  document.getElementById('uploadHint').style.display = 'block';
+  document.getElementById('uploadBox').classList.remove('has-img');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+async function loadCacheStats(){
+  try{
+    const resp = await fetch('/api/cache_stats');
+    const data = await resp.json();
+    document.getElementById('cacheNote').textContent =
+      `已积累 ${data.cached_books} 本书缓存 · 累计调用 ${data.total_calls} 次 · 累计消耗 ${data.total_tokens} tokens`;
+  }catch(e){}
+}
+loadCacheStats();
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# 环境变量（含真实API Key，绝对不能提交）
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 运行时缓存/日志（会自动重新生成，不用进版本库）
+cache/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
