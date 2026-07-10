@@ -1,0 +1,9 @@
+{
+  "name": "book-action-mvp",
+  "cloudFunctions": {
+    "nodejs": {
+      "maxDuration": 120
+    }
+  }
+}
+

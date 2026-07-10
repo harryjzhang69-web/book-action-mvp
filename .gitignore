@@ -11,6 +11,9 @@ venv/
 cache/
 *.log
 
+# EdgeOne Pages 本地构建产物（部署时自动生成，不用进版本库）
+eop_deploy/.edgeone/
+
 # OS
 .DS_Store
 Thumbs.db

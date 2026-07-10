@@ -19,13 +19,11 @@
 
 | 项目 | 值 |
 |---|---|
-| 云服务器 | AnyDev，环境 ID `anybuildInstance-6k6tqsarg0io`，IP `21.91.155.2` **（环境ID会变，用前先 `get_environment_list` 确认）** |
-| 服务路径 | `/data/book_action_mvp/`（服务器上），本地 `c:\Users\Harryjzhang\CodeBuddy\Claw\book_action_mvp\` |
-| 启动方式 | `cd /data/book_action_mvp && sudo nohup python3 app.py > app.log 2>&1 &`，端口 5800 |
-| **直连IP链接（推荐，零确认页，唯一稳定链接）** | `http://21.91.155.2:5800/` —— 打开即用，不依赖用户/开发者本地电脑，只要 AnyDev 环境不被删除就一直在线 |
-| ~~localtunnel 链接~~（2026-07-03 确认已失效，别再用） | `https://harry-product.loca.lt` —— 服务器上同时跑了两个 `lt --port 5800` 进程（`book-action-harryjzhang`和`harry-product`两个subdomain抢同一端口），导致该链接 SSL_PROTOCOL_ERROR。localtunnel 免费隧道本身也不稳定，**已弃用，个人网站按钮已改成直连IP** |
-| GitHub 仓库 | https://github.com/harryjzhang69-web/book-action-mvp （已同步，`.env` 被 `.gitignore` 排除，不含真实 API Key） |
-| 已挂载在个人网站上 | `personal_site` 的 Case Studies 板块有产品卡片，链接已改为直连IP `http://21.91.155.2:5800/`（2026-07-03 修复） |
+| **★ 当前生产环境（推荐，公网可访问）** | EdgeOne Pages，`https://farrahli-59gv2jsp.edgeone.app/` —— 任何人任何网络都能打开，不依赖任何本地/内网服务器，代码见 `eop_deploy/`（Node Functions 运行时，详见该目录 README.md 的架构教训） |
+| ~~云服务器（旧方案，已弃用）~~ | AnyDev，环境 ID `anybuildInstance-6k6tqsarg0io`，IP `21.91.155.2:5800` —— **纯内网 IP，公网完全无法访问**，2026-07-10 已确认并弃用，个人网站按钮已改为指向 EdgeOne 地址 |
+| GitHub 仓库 | https://github.com/harryjzhang69-web/book-action-mvp （已同步：Flask 原版 `app.py` + EdgeOne 存档版 `eop_deploy/`，均不含真实 API Key） |
+| 已挂载在个人网站上 | `personal_site` 的 Case Studies 板块「读书行动派」卡片，「在线体验」按钮已改为跳转 `https://farrahli-59gv2jsp.edgeone.app/` |
+
 
 **换电脑注意**：`.env`（真实 LLM_API_KEY）不在 GitHub 里，新电脑 `git clone` 下来后本地跑不了，需要照着 `.env.example` 重新填一份。但线上服务（21.91.155.2）跟你电脑无关，不受影响。
 
